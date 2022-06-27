@@ -7,7 +7,7 @@ public class HarmonicVector extends JPanel
 {
     private final Pair initialPoint;
     private Pair terminalPoint;
-    private final double DIAMETER = 150;
+    private final double RADIUS = 75;
     private boolean isLastHarmonic = false;
 
     public HarmonicVector(Pair initialPoint, Pair terminalPoint)
@@ -44,9 +44,9 @@ public class HarmonicVector extends JPanel
     public void paintComponent(Graphics g)
     {
         Graphics2D g2d = (Graphics2D) g;
-        Shape circle = new Ellipse2D.Double(initialPoint.x, initialPoint.y, DIAMETER, DIAMETER);
+        Shape circle = new Ellipse2D.Double(initialPoint.x, initialPoint.y, RADIUS * 2, RADIUS * 2);
         g2d.setStroke(new BasicStroke(1.0f));
         g2d.draw(circle);
-        g2d.draw(new Line2D.Double(initialPoint.x + DIAMETER / 2, initialPoint.y + DIAMETER / 2, terminalPoint.x, terminalPoint.y));
+        g2d.draw(new Line2D.Double(initialPoint.x + RADIUS, initialPoint.y + RADIUS, terminalPoint.x, terminalPoint.y));
     }
 }
