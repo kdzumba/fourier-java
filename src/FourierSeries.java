@@ -9,26 +9,25 @@ import java.util.List;
 
 public class FourierSeries extends JFrame implements ActionListener
 {
-    private final int LEFT = 50;
+    private final int LEFT = 100;
     private final int UP = 200;
-    private final int DIAMETER = 150;
-    private final int WINDOW_WIDTH = 800;
-    private final int WINDOW_HEIGHT = 600;
+    private final int WINDOW_WIDTH = 1900;
+    private final int WINDOW_HEIGHT = 1200;
     private final int CURSOR_X_TRANSLATION = 400;
     private final int TIMER_DELAY = 10;
-    private final int RADIUS = 75;
+    private final int AMPLITUDE_SCALER = 400;
     private float angle = 0f;
-    private final double HARMONIC_FREQUENCY = 0.1;
+    private final double HARMONIC_FREQUENCY = 0.05;
     private final List<HarmonicVector> harmonics;
     private final List<Double> waveHeights;
+    private Image doubleBufferImage;
+    private Graphics doubleBufferGraphics;
     public FourierSeries(String title)
     {
         this.waveHeights = new ArrayList<>();
         this.harmonics = new ArrayList<>();
 
-        var firstHarmonic = new HarmonicVector(new Pair(LEFT + RADIUS, UP + RADIUS), new Pair(LEFT + RADIUS * 2, UP + RADIUS));
-        firstHarmonic.setIsLastHarmonic(true);
-        this.harmonics.add(firstHarmonic);
+        addHarmonics(1);
 
         Timer timer = new Timer(TIMER_DELAY, this);
         timer.start();
@@ -39,6 +38,33 @@ public class FourierSeries extends JFrame implements ActionListener
         getContentPane().setBackground(Color.BLACK);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public void addHarmonics(int harmonicCount)
+    {
+        for(int n = 0; n < harmonicCount; n++)
+        {
+            var coefficient = 2 * n + 1;
+            var amplitude = AMPLITUDE_SCALER / (coefficient * Math.PI);
+            HarmonicVector harmonic;
+
+            if(n == 0)
+            {
+                harmonic = new HarmonicVector(new Pair(LEFT, UP), new Pair(LEFT + amplitude * 2, UP + amplitude), amplitude, coefficient);
+            }
+            else
+            {
+                harmonic = new HarmonicVector(new Pair(harmonics.get(n - 1).getTerminalPoint().x - amplitude, harmonics.get(n - 1).getTerminalPoint().y - amplitude),
+                        new Pair(harmonics.get(n - 1).getTerminalPoint().x + amplitude, harmonics.get(n - 1).getTerminalPoint().y),
+                        amplitude, coefficient);
+            }
+
+            if(n == harmonicCount - 1)
+            {
+                harmonic.setIsLastHarmonic(true);
+            }
+            this.harmonics.add(harmonic);
+        }
     }
 
     public void drawCursor(Graphics2D g, Pair initialPoint, Pair terminalPoint)
@@ -60,13 +86,28 @@ public class FourierSeries extends JFrame implements ActionListener
     @Override
     public void paint(Graphics g)
     {
-        super.paint(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g.setColor(Color.WHITE);
+        doubleBufferImage = createImage(getWidth(), getHeight());
+        doubleBufferGraphics = doubleBufferImage.getGraphics();
 
-        harmonics.forEach(harmonic -> {
-            harmonic.setTerminalPoint(new Pair(harmonic.getInitialPoint().x + RADIUS + RADIUS * Math.cos(angle),
-                    harmonic.getInitialPoint().y + RADIUS + RADIUS * Math.sin(angle)));
+        super.paint(doubleBufferGraphics);
+        Graphics2D g2d = (Graphics2D) doubleBufferGraphics;
+        doubleBufferGraphics.setColor(Color.WHITE);
+
+        for(int n = 0; n < harmonics.size(); n++)
+        {
+            var harmonic = harmonics.get(n);
+            if(n == 0)
+            {
+                harmonic.setTerminalPoint(new Pair(harmonic.getInitialPoint().x + harmonic.getRadius() + harmonic.getRadius() * Math.cos(harmonic.getFrequency() * angle),
+                        harmonic.getInitialPoint().y + harmonic.getRadius() + harmonic.getRadius() * Math.sin(harmonic.getFrequency() * angle)));
+            }
+            else
+            {
+                harmonic.setInitialPoint(new Pair(harmonics.get(n - 1).getTerminalPoint().x - harmonic.getRadius(), harmonics.get(n - 1).getTerminalPoint().y - harmonic.getRadius()));
+                harmonic.setTerminalPoint(new Pair(harmonic.getInitialPoint().x + harmonic.getRadius() + harmonic.getRadius() * Math.cos(harmonic.getFrequency() * angle),
+                        harmonic.getInitialPoint().y + harmonic.getRadius() + harmonic.getRadius() * Math.sin(harmonic.getFrequency() * angle)));
+            }
+
             harmonic.paintComponent(g2d);
 
             if(harmonic.getIsLastHarmonic())
@@ -74,12 +115,11 @@ public class FourierSeries extends JFrame implements ActionListener
                 drawCursor(g2d, harmonic.getTerminalPoint(), new Pair(CURSOR_X_TRANSLATION, harmonic.getTerminalPoint().y));
                 this.waveHeights.add(0, harmonic.getTerminalPoint().y);
             }
-        });
+        }
 
         this.removeOffScreenPoints();
-        waveHeights.forEach(height -> {
-            g2d.draw(new Line2D.Double(CURSOR_X_TRANSLATION + waveHeights.indexOf(height), height, CURSOR_X_TRANSLATION + waveHeights.indexOf(height), height));
-        });
+        waveHeights.forEach(height -> g2d.draw(new Line2D.Double(CURSOR_X_TRANSLATION + waveHeights.indexOf(height), height, CURSOR_X_TRANSLATION + waveHeights.indexOf(height), height)));
+        g.drawImage(doubleBufferImage, 0, 0, this);
     }
 
     public static void main(String[] args) {
