@@ -46,7 +46,14 @@ public class FourierSeries extends JFrame implements ActionListener
 
     private void removeOffScreenPoints()
     {
-        //TODO: Implement this method
+        //Use traditional for loop here to avoid ConcurrentModificatoinException
+        for(int index = 0; index < waveHeights.size(); index++)
+        {
+            if(index + 400 > 800)
+            {
+                waveHeights.remove(waveHeights.get(index));
+            }
+        }
     }
     @Override
     public void paint(Graphics g)
