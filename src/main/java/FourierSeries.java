@@ -1,3 +1,5 @@
+import fourier.common.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -59,7 +61,7 @@ public class FourierSeries extends JFrame implements ActionListener
         drawAxis(g2d, new Pair(245, 295));
         doubleBufferGraphics.setColor(Color.WHITE);
 
-        var harmonics = waves.getSawToothWave(100);
+        var harmonics = waves.getSquareWave(200);
 
         for(int n = 0; n < harmonics.size(); n++)
         {

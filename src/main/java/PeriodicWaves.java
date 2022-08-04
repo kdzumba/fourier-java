@@ -1,3 +1,5 @@
+import fourier.common.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +42,8 @@ public class PeriodicWaves
 
         if(n == 0)
         {
-            harmonic = new HarmonicVector(new Pair(Constants.LEFT_TRANSLATION, Constants.UP_TRANSLATION),
-                    new Pair(Constants.LEFT_TRANSLATION + amplitude * 2, Constants.UP_TRANSLATION + amplitude), amplitude, coefficient);
+            harmonic = new HarmonicVector(new Pair(Constants.HORIZONTAL_TRANSLATION, Constants.VERTICAL_TRANSLATION),
+                    new Pair(Constants.HORIZONTAL_TRANSLATION + amplitude * 2, Constants.VERTICAL_TRANSLATION + amplitude), amplitude, coefficient);
         }
         else
         {
