@@ -30,7 +30,7 @@ public class Renderer
         {
             var current = points.get(n);
             graphics2D.setStroke(new BasicStroke(0.5f));
-            graphics2D.setColor(Color.RED);
+            graphics2D.setColor(new Color(170, 50, 150));
             if(n != 0)
             {
                 var prev = points.get(n - 1);
@@ -45,7 +45,8 @@ public class Renderer
 
     private static void drawVectorLine(Coordinate initial, Coordinate terminal)
     {
-        graphics2D.setStroke(new BasicStroke(2.0f));
+        graphics2D.setStroke(new BasicStroke(1.5f));
+        graphics2D.setColor(new Color(200, 200, 200));
         graphics2D.draw(new Line2D.Double(initial.getX(), initial.getY(), terminal.getX(), terminal.getY()));
     }
 
@@ -54,7 +55,8 @@ public class Renderer
         double diameter = radius * 2;
 
         Shape circle = new Ellipse2D.Double(center.getX() - radius, center.getY()  - radius, diameter, diameter);
-        graphics2D.setStroke(new BasicStroke(1.0f));
+        graphics2D.setStroke(new BasicStroke(0.02f));
+        graphics2D.setColor(new Color(10, 140, 170));
         graphics2D.draw(circle);
     }
 

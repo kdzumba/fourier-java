@@ -37,7 +37,7 @@ public class MainPanel extends JPanel implements ActionListener
     {
         var image = ImageProcessor.loadImage(this.imageUrl);
         var orderedPixelPositions = ImageProcessor.getOrderedPixelPositions(image);
-        var imagePointsFromFile =  ImageProcessor.loadImagePointsFromFile("D:\\dev\\sandbox\\java\\Fourier\\src\\main\\java\\fourier\\rose.txt");
+        var imagePointsFromFile =  ImageProcessor.loadImagePointsFromFile("D:\\dev\\sandbox\\java\\Fourier\\src\\main\\java\\fourier\\einstein.txt");
         List<ComplexNumber> imagePoints = ComplexNumber.convertToComplex(imagePointsFromFile);
         List<ComplexNumber> transformedImage = FourierAlgorithms.discreteFourierTransform(imagePoints);
         this.epicycles = Epicycle.generateEpicycles(transformedImage);
