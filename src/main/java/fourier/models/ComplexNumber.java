@@ -24,8 +24,8 @@ public class ComplexNumber
     public static List<ComplexNumber> convertToComplex(List<Coordinate> cartesian)
     {
         var complexNumbers = new ArrayList<ComplexNumber>();
-        var interval = 1;
-        var omission = 0;
+        var interval = 3;
+        var omission = 20;
 
         for(int n = 0; n < cartesian.size() - omission; n+=interval)
         {

@@ -3,11 +3,14 @@ package fourier.imageprocessing;
 import fourier.algorithms.GraphAlgorithms;
 import fourier.models.Coordinate;
 import fourier.models.ImageGraph;
+import fourier.models.Node;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,9 +21,14 @@ import java.util.Scanner;
 
 public class ImageProcessor extends JFrame
 {
+    private static List<Coordinate> orderedPixelPositions = new ArrayList<>();
+    private static BufferedImage processed = null;
 
     public ImageProcessor()
     {
+        var source = loadImageFromURL("https://upload.wikimedia.org/wikipedia/en/5/52/Phineas_Flynn.png");
+        processed = createBlackAndWhite(source);
+
         setSize(800, 600);
         setTitle("Image Processor");
         setResizable(false);
@@ -43,12 +51,12 @@ public class ImageProcessor extends JFrame
                     result.add(new Coordinate(x, y));
             }
         }
-
         ImageGraph g = new ImageGraph(result);
-        return GraphAlgorithms.nearestNeighbour(g);
+        orderedPixelPositions = GraphAlgorithms.nearestNeighbour(g);
+        return orderedPixelPositions;
     }
 
-    public static BufferedImage loadImage(String imageUrl)
+    public static BufferedImage loadImageFromURL(String imageUrl)
     {
         URL url;
         BufferedImage img;
@@ -70,6 +78,24 @@ public class ImageProcessor extends JFrame
             throw new RuntimeException(e);
         }
         return img;
+    }
+
+    public static BufferedImage createBlackAndWhite(BufferedImage source)
+    {
+        var image = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+        Graphics g = image.createGraphics();
+        g.drawImage(source, 0, 0, null);
+        ColorConvertOp colorConvertOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        colorConvertOp.filter(image, image);
+
+
+//        blackWhite = new BufferedImage(master.getWidth(), master.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+//        Graphics2D g2d = blackWhite.createGraphics();
+//        g2d.drawImage(master, 0, 0, this);
+//        g2d.dispose();
+
+
+        return image;
     }
 
     public static List<Coordinate> loadImagePointsFromFile(String filename)
@@ -99,27 +125,8 @@ public class ImageProcessor extends JFrame
     @Override
     public void paint(Graphics g)
     {
-        URL imageURL;
         Graphics2D g2d = (Graphics2D) g;
-
-        try {
-            imageURL = new URL("https://www.drawinghowtodraw.com/stepbystepdrawinglessons/wp-content/uploads/2009/10/2howtodrawcat-finished-small.png");
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<Coordinate> pixelPositions;
-        try {
-            BufferedImage img = ImageIO.read(imageURL);
-            pixelPositions = getOrderedPixelPositions(img);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        pixelPositions.forEach(p -> {
-            g2d.drawLine((int) p.getX(), (int) p.getY(), (int) p.getX(), (int) p.getY());
-        });
+        g2d.drawImage(processed, 0, 0, processed.getWidth(), processed.getHeight(), null);
     }
 
 

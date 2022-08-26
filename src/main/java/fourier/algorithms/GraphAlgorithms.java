@@ -10,24 +10,29 @@ public class GraphAlgorithms
 {
     public static List<Coordinate> nearestNeighbour(ImageGraph imageGraph)
     {
-        Queue<Node> toBeVisited = new PriorityQueue<>(Comparator.comparingInt(Node::getPriority));
-        List<Coordinate> visited = new ArrayList<>();
-
         var nodes = imageGraph.getNodes();
-        toBeVisited.addAll(nodes);
+        List<Coordinate> path = new ArrayList<>();
+        path.add(nodes.remove(0).getCoordinate());
 
-        while(!toBeVisited.isEmpty())
+        while(!nodes.isEmpty())
         {
-            var current = toBeVisited.remove();
-            current.setVisited(true);
-            visited.add(current.getCoordinate());
-
-            Random random = new Random();
-            int nextIndex = random.nextInt(current.getNeighbours().size());
-            var next = current.getNeighbours().get(nextIndex);
-            next.setPriority(Integer.MAX_VALUE);
-            next.setParent(current);
+            int nearestIndex=findNearestIndex(path.get(path.size() - 1), nodes);
+            path.add(nodes.remove(nearestIndex).getCoordinate());
         }
-        return visited;
+        return path;
+    }
+
+    static int findNearestIndex(Coordinate current, List<Node> nodes) {
+        double nearestDistSquared=Double.POSITIVE_INFINITY;
+        int nearestIndex = -1;
+        for (int i=0; i< nodes.size(); i++) {
+            Coordinate next = nodes.get(i).getCoordinate();
+            var distance = current.getDistanceTo(next);
+            if(distance < nearestDistSquared) {
+                nearestDistSquared = distance;
+                nearestIndex = i;
+            }
+        }
+        return nearestIndex;
     }
 }

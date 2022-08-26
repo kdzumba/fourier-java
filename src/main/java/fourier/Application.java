@@ -13,8 +13,8 @@ public class Application extends JFrame
     public Application()
     {
         setLayout(new BorderLayout());
-        var panel = new MainPanel(bart);
-//        panel.init();
+        var panel = new MainPanel(phineas);
+        panel.init();
         this.add(panel);
         setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setTitle(Constants.APPLICATION_TITLE);
