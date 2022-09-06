@@ -2,7 +2,6 @@ package fourier.imageprocessing;
 
 import fourier.algorithms.GraphAlgorithms;
 import fourier.models.Coordinate;
-import fourier.models.ImageGraph;
 import fourier.models.Node;
 
 import javax.imageio.ImageIO;
@@ -14,19 +13,20 @@ import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 public class ImageProcessor extends JFrame
 {
-    private static List<Coordinate> orderedPixelPositions = new ArrayList<>();
     private static BufferedImage processed = null;
 
     public ImageProcessor()
     {
-        var source = loadImageFromURL("https://upload.wikimedia.org/wikipedia/en/5/52/Phineas_Flynn.png");
+        var source = loadImageFromWebURL("https://upload.wikimedia.org/wikipedia/en/5/52/Phineas_Flynn.png");
         processed = createBlackAndWhite(source);
 
         setSize(800, 600);
@@ -38,25 +38,78 @@ public class ImageProcessor extends JFrame
     }
     public static List<Coordinate> getOrderedPixelPositions(BufferedImage img)
     {
-        var result = new ArrayList<Coordinate>();
         var imgHeight = img.getHeight();
         var imgWidth = img.getWidth();
+        var imageNodes = new HashSet<Node>();
 
-        for(int x = 0; x < imgWidth; x++)
+        for(int x = 0; x < imgWidth; x+=1)
         {
-            for(int y = 0; y < imgHeight; y++)
+            for(int y = 0; y < imgHeight; y+=1)
             {
                 var c = new Color(img.getRGB(x, y));
                 if(c.getGreen() != 255 && c.getRed() != 255 && c.getBlue() != 255)
-                    result.add(new Coordinate(x, y));
+                {
+                    var node = new Node();
+                    node.setVisited(false);
+                    node.setCoordinate(new Coordinate(x, y));
+
+                    if(x - 1 >= 0)
+                    {
+                        var leftNeighbour = new Node();
+                        leftNeighbour.setVisited(false);
+                        leftNeighbour.setCoordinate(new Coordinate(x - 1, y));
+                        node.getNeighbours().add(leftNeighbour);
+                        imageNodes.add(leftNeighbour);
+                    }
+
+                    if(x + 1 < imgWidth)
+                    {
+                        var rightNeigbour = new Node();
+                        rightNeigbour.setVisited(false);
+                        rightNeigbour.setCoordinate(new Coordinate(x + 1, y));
+                        node.getNeighbours().add(rightNeigbour);
+                        imageNodes.add(rightNeigbour);
+                    }
+
+                    if(y - 1 >= 0)
+                    {
+                        var topNeighbour = new Node();
+                        topNeighbour.setVisited(false);
+                        topNeighbour.setCoordinate(new Coordinate(x, y - 1));
+                        node.getNeighbours().add(topNeighbour);
+                        imageNodes.add(topNeighbour);
+                    }
+
+                    if(y + 1 < imgHeight)
+                    {
+                        var bottomNeighbour = new Node();
+                        bottomNeighbour.setVisited(false);
+                        bottomNeighbour.setCoordinate(new Coordinate(x, y - 1));
+                        node.getNeighbours().add(bottomNeighbour);
+                        imageNodes.add(bottomNeighbour);
+                    }
+                    if(x == 0 && y == 0)
+                        node.setPriority(Integer.MAX_VALUE);
+                    imageNodes.add(node);
+                }
             }
         }
-        ImageGraph g = new ImageGraph(result);
-        orderedPixelPositions = GraphAlgorithms.nearestNeighbour(g);
-        return orderedPixelPositions;
+        var nodesList = new ArrayList<>(imageNodes);
+        return GraphAlgorithms.nearestNeighbour(nodesList);
     }
 
-    public static BufferedImage loadImageFromURL(String imageUrl)
+    public static BufferedImage loadImageFromFile(String filePath)
+    {
+        try {
+            File img = new File(filePath);
+            return ImageIO.read(img);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage loadImageFromWebURL(String imageUrl)
     {
         URL url;
         BufferedImage img;
@@ -87,23 +140,15 @@ public class ImageProcessor extends JFrame
         g.drawImage(source, 0, 0, null);
         ColorConvertOp colorConvertOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
         colorConvertOp.filter(image, image);
-
-
-//        blackWhite = new BufferedImage(master.getWidth(), master.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-//        Graphics2D g2d = blackWhite.createGraphics();
-//        g2d.drawImage(master, 0, 0, this);
-//        g2d.dispose();
-
-
         return image;
     }
 
-    public static List<Coordinate> loadImagePointsFromFile(String filename)
+    public static List<Coordinate> loadImagePointsFromFile(URL url)
     {
         var imagePoints = new ArrayList<Coordinate>();
         try
         {
-            File file = new File(filename);
+            File file = new File(url.toURI());
             Scanner scanner = new Scanner(file);
 
             while(scanner.hasNextLine())
@@ -115,7 +160,7 @@ public class ImageProcessor extends JFrame
                 imagePoints.add(new Coordinate(x,y));
             }
         }
-        catch(IOException e)
+        catch(IOException | URISyntaxException e)
         {
             throw new RuntimeException(e);
         }
@@ -128,7 +173,6 @@ public class ImageProcessor extends JFrame
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(processed, 0, 0, processed.getWidth(), processed.getHeight(), null);
     }
-
 
     public static void main(String[] args) throws IOException {
        new ImageProcessor();

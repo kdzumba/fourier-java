@@ -1,11 +1,14 @@
 package fourier.models;
 
+import com.sun.source.doctree.SeeTree;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +19,7 @@ public class Node
     private boolean visited;
     private Node parent;
     private int priority = Integer.MIN_VALUE;
-    private List<Node> neighbours = new ArrayList<>();
+    private Set<Node> neighbours = new HashSet<>();
 
     @Override
     public boolean equals(Object other)

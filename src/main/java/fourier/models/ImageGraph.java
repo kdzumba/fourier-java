@@ -24,7 +24,8 @@ public class ImageGraph
             nodes.add(node);
         }
 
-        //set the neighbour nodes for each node
+        //set the neighbour nodes for each node. This is the slowest bit
+        //when drawing from an image
         nodes.forEach(node -> {
             for(Node potentialNeighbour : nodes)
             {

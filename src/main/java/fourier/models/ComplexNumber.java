@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,21 +20,22 @@ public class ComplexNumber
         return Math.sqrt(Math.pow(real, 2) + Math.pow(imaginary, 2));
     }
 
-    public static List<ComplexNumber> convertToComplex(List<Coordinate> cartesian)
+    public static ComplexNumber[] convertToComplex(List<Coordinate> cartesian)
     {
-        var complexNumbers = new ArrayList<ComplexNumber>();
-        var interval = 3;
-        var omission = 20;
+        var interval = 2;
+        var complexNumbers = new ComplexNumber[cartesian.size() / interval];
 
-        for(int n = 0; n < cartesian.size() - omission; n+=interval)
+        var omission = 0;
+        if(cartesian.size() % interval != 0)
+            omission = interval;
+
+        for(int n = 0; n < cartesian.size() - omission; n += interval)
         {
             var real = cartesian.get(n).getX();
             var imaginary = cartesian.get(n).getY();
-
             var complex = new ComplexNumber(real, imaginary, 0);
-            complexNumbers.add(complex);
+            complexNumbers[n / interval] = complex;
         }
-
         return complexNumbers;
     }
 

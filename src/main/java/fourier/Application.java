@@ -1,31 +1,57 @@
 package fourier;
 
 import fourier.common.Constants;
+import fourier.interfaces.IPublisher;
+import fourier.interfaces.ISubscriber;
+import fourier.models.Coordinate;
+import fourier.ui.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Application extends JFrame
+public class Application extends JFrame implements ISubscriber
 {
-    private String cat = "https://www.drawinghowtodraw.com/stepbystepdrawinglessons/wp-content/uploads/2009/10/2howtodrawcat-finished-small.png";
-    private String phineas = "https://www.drawinghowtodraw.com/stepbystepdrawinglessons/wp-content/uploads/2009/10/phineas.png";
-    private String bart = "https://i.stack.imgur.com/wyRLn.png";
+    private final WorkspacePanel drawingPanel;
+    public static List<Coordinate> imagePoints = new ArrayList<>();
     public Application()
     {
         setLayout(new BorderLayout());
-        var panel = new MainPanel(phineas);
-        panel.init();
-        this.add(panel);
-        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
-        setTitle(Constants.APPLICATION_TITLE);
-        setResizable(false);
-        getContentPane().setBackground(Color.BLACK);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.drawingPanel = new WorkspacePanel();
+        LeftPanel leftPanel = new LeftPanel();
+
+        var actionsPanel = new ActionsPanel();
+        var screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        this.add(drawingPanel, BorderLayout.CENTER);
+        this.add(leftPanel, BorderLayout.WEST);
+        this.add(actionsPanel, BorderLayout.NORTH);
+//        this.setSize(screenSize.width, screenSize.height);
+        this.setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        this.setTitle(Constants.APPLICATION_TITLE);
+        this.setResizable(true);
+        this.getContentPane().setBackground(Color.BLACK);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        for(Component c : leftPanel.getComponents())
+        {
+            if(c instanceof JPanel)
+                for(Component child : ((JPanel) c).getComponents())
+                    if(child instanceof IPublisher)
+                        ((IPublisher) child).addSubscriber(this);
+
+        }
     }
 
     public static void main(String[] args)
     {
         new Application();
+    }
+
+    @Override
+    public void update() {
+        this.drawingPanel.update(imagePoints);
     }
 }

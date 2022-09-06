@@ -24,7 +24,7 @@ public class Epicycle
 
     public double getRadius()
     {
-        return component.getMagnitude();
+        return component.getMagnitude() / 2;
     }
 
     public double getFrequency()
@@ -32,15 +32,14 @@ public class Epicycle
         return component.getFrequency();
     }
 
-    public static List<Epicycle> generateEpicycles(List<ComplexNumber> signal)
+    public static Epicycle[] generateEpicycles(ComplexNumber[] signal)
     {
-        var N = signal.size();
-        var epicycles = new ArrayList<Epicycle>();
+        var epicycles = new Epicycle[signal.length];
 
-        for(int n = 0; n < N; n++)
+        for(int n = 0; n < signal.length; n++)
         {
             var epicycle = new Epicycle();
-            epicycle.setComponent(signal.get(n));
+            epicycle.setComponent(signal[n]);
 
             if(n == 0)
             {
@@ -51,13 +50,13 @@ public class Epicycle
             }
             else
             {
-                var previous = epicycles.get(n - 1);
+                var previous = epicycles[n - 1];
                 epicycle.setCenter(previous.getTerminal());
                 var terminalX = epicycle.getCenter().getX() + epicycle.getComponent().getReal();
                 var terminalY = epicycle.getCenter().getY() + epicycle.getComponent().getImaginary();
                 epicycle.setTerminal(new Coordinate(terminalX, terminalY));
             }
-            epicycles.add(epicycle);
+            epicycles[n] = epicycle;
         }
         return epicycles;
     }

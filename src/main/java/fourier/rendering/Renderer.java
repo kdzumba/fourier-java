@@ -15,6 +15,7 @@ public class Renderer
     public static Graphics2D graphics2D;
     public static double animationTimer = 0d;
     public static List<Coordinate> drawing = new ArrayList<>();
+    public static Color penColor = new Color(170, 50, 150);
 
     public static void drawEpiCycles(List<Epicycle> signal)
     {
@@ -30,11 +31,14 @@ public class Renderer
         {
             var current = points.get(n);
             graphics2D.setStroke(new BasicStroke(0.5f));
-            graphics2D.setColor(new Color(170, 50, 150));
+            graphics2D.setColor(penColor);
             if(n != 0)
             {
                 var prev = points.get(n - 1);
-                graphics2D.draw(new Line2D.Double(prev.getX(), prev.getY(), current.getX(), current.getY()));
+                if(current.getPixelColor() != null)
+                    penColor = current.getPixelColor();
+                if(prev.getDistanceTo(current) <= 3)
+                    graphics2D.draw(new Line2D.Double(prev.getX(), prev.getY(), current.getX(), current.getY()));
             }
             else
             {
@@ -46,7 +50,7 @@ public class Renderer
     private static void drawVectorLine(Coordinate initial, Coordinate terminal)
     {
         graphics2D.setStroke(new BasicStroke(1.5f));
-        graphics2D.setColor(new Color(200, 200, 200));
+        graphics2D.setColor(new Color(00, 200, 0));
         graphics2D.draw(new Line2D.Double(initial.getX(), initial.getY(), terminal.getX(), terminal.getY()));
     }
 
