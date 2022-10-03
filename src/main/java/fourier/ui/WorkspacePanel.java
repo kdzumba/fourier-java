@@ -2,7 +2,7 @@ package fourier.ui;
 
 import fourier.algorithms.FourierAlgorithms;
 import fourier.common.Constants;
-import fourier.models.ComplexNumber;
+import fourier.models.Phasor;
 import fourier.models.Coordinate;
 import fourier.models.Epicycle;
 import fourier.rendering.Renderer;
@@ -22,26 +22,18 @@ public class WorkspacePanel extends JPanel
 {
     public static boolean isDrawing = false;
     private final DrawingPanel drawingPanel;
-    private final OriginalImagePanel originalImagePanel;
 
     public WorkspacePanel()
     {
         var layout = new BoxLayout(this, BoxLayout.X_AXIS);
         setLayout(layout);
         drawingPanel = new DrawingPanel();
-        originalImagePanel = new OriginalImagePanel();
         this.add(drawingPanel);
-        this.add(originalImagePanel);
     }
 
     public void update(List<Coordinate> coordinates)
     {
         drawingPanel.update(coordinates);
-    }
-
-    public void setOriginalImage(BufferedImage image)
-    {
-        originalImagePanel.setOriginalImage(image);
     }
 
     public
@@ -73,7 +65,7 @@ public class WorkspacePanel extends JPanel
         {
             Timer timer = new Timer(Constants.TIMER_DELAY, this);
             timer.start();
-            this.setBackground(new Color(240, 240, 240));
+            this.setBackground(new Color(0, 0, 0));
             setVisible(true);
         }
 
@@ -113,8 +105,7 @@ public class WorkspacePanel extends JPanel
             Renderer.graphics2D.clearRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
             Renderer.drawing.clear();
             this.time = 0;
-            var imagePoints = ComplexNumber.convertToComplex(coordinates);
-            var transformedImage = FourierAlgorithms.discreteFourierTransform(imagePoints);
+            var transformedImage = FourierAlgorithms.discreteFourierTransform(coordinates);
             epicycles = new ArrayList<>(Arrays.asList(Epicycle.generateEpicycles(transformedImage)));
             this.removeAll();
             this.repaint();

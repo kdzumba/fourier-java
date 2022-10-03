@@ -61,7 +61,7 @@ public class FourierSeries extends JFrame implements ActionListener
         drawAxis(g2d, new Pair(245, 295));
         doubleBufferGraphics.setColor(Color.WHITE);
 
-        var harmonics = waves.getSquareWave(200);
+        var harmonics = waves.getSquareWave(3);
 
         for(int n = 0; n < harmonics.size(); n++)
         {

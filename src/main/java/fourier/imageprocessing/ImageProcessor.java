@@ -36,66 +36,32 @@ public class ImageProcessor extends JFrame
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-    public static List<Coordinate> getOrderedPixelPositions(BufferedImage img)
+    private static ArrayList<Coordinate> getPixelCoordinates(BufferedImage image)
     {
-        var imgHeight = img.getHeight();
-        var imgWidth = img.getWidth();
-        var imageNodes = new HashSet<Node>();
+        var imageHeight = image.getHeight();
+        var imageWidth = image.getWidth();
+        var pixelCoordinates = new ArrayList<Coordinate>();
 
-        for(int x = 0; x < imgWidth; x+=1)
+        int skipInterval = 1; //Dictates how many pixels we are actually considering for processing
+
+        for(int x = 0; x < imageWidth; x+=skipInterval)
         {
-            for(int y = 0; y < imgHeight; y+=1)
+            for(int y = 0; y < imageHeight; y+=skipInterval)
             {
-                var c = new Color(img.getRGB(x, y));
+                var c = new Color(image.getRGB(x, y));
                 if(c.getGreen() != 255 && c.getRed() != 255 && c.getBlue() != 255)
                 {
-                    var node = new Node();
-                    node.setVisited(false);
-                    node.setCoordinate(new Coordinate(x, y));
-
-                    if(x - 1 >= 0)
-                    {
-                        var leftNeighbour = new Node();
-                        leftNeighbour.setVisited(false);
-                        leftNeighbour.setCoordinate(new Coordinate(x - 1, y));
-                        node.getNeighbours().add(leftNeighbour);
-                        imageNodes.add(leftNeighbour);
-                    }
-
-                    if(x + 1 < imgWidth)
-                    {
-                        var rightNeigbour = new Node();
-                        rightNeigbour.setVisited(false);
-                        rightNeigbour.setCoordinate(new Coordinate(x + 1, y));
-                        node.getNeighbours().add(rightNeigbour);
-                        imageNodes.add(rightNeigbour);
-                    }
-
-                    if(y - 1 >= 0)
-                    {
-                        var topNeighbour = new Node();
-                        topNeighbour.setVisited(false);
-                        topNeighbour.setCoordinate(new Coordinate(x, y - 1));
-                        node.getNeighbours().add(topNeighbour);
-                        imageNodes.add(topNeighbour);
-                    }
-
-                    if(y + 1 < imgHeight)
-                    {
-                        var bottomNeighbour = new Node();
-                        bottomNeighbour.setVisited(false);
-                        bottomNeighbour.setCoordinate(new Coordinate(x, y - 1));
-                        node.getNeighbours().add(bottomNeighbour);
-                        imageNodes.add(bottomNeighbour);
-                    }
-                    if(x == 0 && y == 0)
-                        node.setPriority(Integer.MAX_VALUE);
-                    imageNodes.add(node);
+                    var coordinate = new Coordinate(x, y);
+                    pixelCoordinates.add(coordinate);
                 }
             }
         }
-        var nodesList = new ArrayList<>(imageNodes);
-        return GraphAlgorithms.nearestNeighbour(nodesList);
+        return pixelCoordinates;
+    }
+    public static List<Coordinate> getOrderedPixelPositions(BufferedImage image)
+    {
+        var pixelCoordinates = getPixelCoordinates(image);
+        return GraphAlgorithms.nearestNeighbour(pixelCoordinates);
     }
 
     public static BufferedImage loadImageFromFile(String filePath)

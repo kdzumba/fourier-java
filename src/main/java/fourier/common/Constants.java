@@ -9,6 +9,6 @@ public class Constants
     public static final int WINDOW_WIDTH = 1920;
     public static final int WINDOW_HEIGHT = 1200;
     public static final int TIMER_DELAY = 0;
-    public static final double HARMONIC_FREQUENCY = 0.005;
+    public static final double HARMONIC_FREQUENCY = 0.05;
     public static final String APPLICATION_TITLE = "Fourier Analysis";
 }

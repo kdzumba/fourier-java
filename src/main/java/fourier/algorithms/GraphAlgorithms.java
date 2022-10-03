@@ -1,34 +1,32 @@
 package fourier.algorithms;
 
 import fourier.models.Coordinate;
-import fourier.models.Node;
 
 import java.util.*;
 
 public class GraphAlgorithms
 {
-    public static List<Coordinate> nearestNeighbour(List<Node> nodes)
+    public static List<Coordinate> nearestNeighbour(List<Coordinate> coordinates)
     {
         List<Coordinate> path = new ArrayList<>();
         var random = new Random();
-        var startIndex = random.nextInt(nodes.size());
-        path.add(nodes.remove(startIndex).getCoordinate());
+        var startIndex = random.nextInt(coordinates.size());
+        path.add(coordinates.remove(startIndex));
 
-        while(!nodes.isEmpty())
+        while(!coordinates.isEmpty())
         {
-            int nearestIndex=findNearestIndex(path.get(path.size() - 1), nodes);
-            path.add(nodes.remove(nearestIndex).getCoordinate());
+            int nearestIndex=findNearestIndex(path.get(path.size() - 1), coordinates);
+            path.add(coordinates.remove(nearestIndex));
         }
         return path;
     }
-
-    static int findNearestIndex(Coordinate current, List<Node> nodes) {
+    static int findNearestIndex(Coordinate current, List<Coordinate> coordinates) {
         double nearestDistance = Double.POSITIVE_INFINITY;
         int nearestIndex = -1;
 
-        for (int i = 0; i < nodes.size(); i++)
+        for (int i = 0; i < coordinates.size(); i++)
         {
-            Coordinate next = nodes.get(i).getCoordinate();
+            Coordinate next = coordinates.get(i);
             var distance = current.getDistanceTo(next);
             if(distance < nearestDistance)
             {

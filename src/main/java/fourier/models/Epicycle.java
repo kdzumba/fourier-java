@@ -1,21 +1,17 @@
 package fourier.models;
 
 import fourier.rendering.Renderer;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Epicycle
 {
-    private Coordinate center = new Coordinate();
-    private Coordinate terminal = new Coordinate();
-    private ComplexNumber component = new ComplexNumber();
+    private Coordinate center;
+    private Coordinate terminal;
+    private Phasor component;
 
     public double getPhase()
     {
@@ -32,7 +28,7 @@ public class Epicycle
         return component.getFrequency();
     }
 
-    public static Epicycle[] generateEpicycles(ComplexNumber[] signal)
+    public static Epicycle[] generateEpicycles(Phasor[] signal)
     {
         var epicycles = new Epicycle[signal.length];
 
@@ -44,16 +40,16 @@ public class Epicycle
             if(n == 0)
             {
                 epicycle.setCenter(new Coordinate(0, 0));
-                var terminalX = epicycle.getComponent().getReal();
-                var terminalY =  epicycle.getComponent().getImaginary();
+                var terminalX = epicycle.getComponent().getTerminal().getX();
+                var terminalY =  epicycle.getComponent().getTerminal().getY();
                 epicycle.setTerminal(new Coordinate(terminalX , terminalY));
             }
             else
             {
                 var previous = epicycles[n - 1];
                 epicycle.setCenter(previous.getTerminal());
-                var terminalX = epicycle.getCenter().getX() + epicycle.getComponent().getReal();
-                var terminalY = epicycle.getCenter().getY() + epicycle.getComponent().getImaginary();
+                var terminalX = epicycle.getCenter().getX() + epicycle.getComponent().getTerminal().getX();
+                var terminalY = epicycle.getCenter().getY() + epicycle.getComponent().getTerminal().getY();
                 epicycle.setTerminal(new Coordinate(terminalX, terminalY));
             }
             epicycles[n] = epicycle;
