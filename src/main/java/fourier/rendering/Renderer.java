@@ -15,7 +15,7 @@ public class Renderer
     public static Graphics2D graphics2D;
     public static double animationTimer = 0d;
     public static List<Coordinate> drawing = new ArrayList<>();
-    public static Color penColor = new Color(240, 255, 255);
+    public static Color penColor = new Color(250, 10, 200);
 
     public static void drawEpiCycles(List<Epicycle> signal)
     {
@@ -35,7 +35,7 @@ public class Renderer
             if(n != 0)
             {
                 var prev = points.get(n - 1);
-                if(prev.getDistanceTo(current) <= 3)
+                if(prev.getDistanceTo(current) <= 6)
                     graphics2D.draw(new Line2D.Double(prev.getX(), prev.getY(), current.getX(), current.getY()));
             }
             else

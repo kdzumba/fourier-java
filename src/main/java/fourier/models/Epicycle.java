@@ -3,6 +3,8 @@ package fourier.models;
 import fourier.rendering.Renderer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class Epicycle
 
     public double getRadius()
     {
-        return component.getMagnitude() / 2;
+        return component.getMagnitude();
     }
 
     public double getFrequency()
@@ -28,14 +30,14 @@ public class Epicycle
         return component.getFrequency();
     }
 
-    public static Epicycle[] generateEpicycles(Phasor[] signal)
+    public static List<Epicycle> generateEpicycles(List<Phasor> signal)
     {
-        var epicycles = new Epicycle[signal.length];
+        var epicycles = new ArrayList<Epicycle>();
 
-        for(int n = 0; n < signal.length; n++)
+        for(int n = 0; n < signal.size(); n++)
         {
             var epicycle = new Epicycle();
-            epicycle.setComponent(signal[n]);
+            epicycle.setComponent(signal.get(n));
 
             if(n == 0)
             {
@@ -46,13 +48,13 @@ public class Epicycle
             }
             else
             {
-                var previous = epicycles[n - 1];
+                var previous = epicycles.get(n - 1);
                 epicycle.setCenter(previous.getTerminal());
                 var terminalX = epicycle.getCenter().getX() + epicycle.getComponent().getTerminal().getX();
                 var terminalY = epicycle.getCenter().getY() + epicycle.getComponent().getTerminal().getY();
                 epicycle.setTerminal(new Coordinate(terminalX, terminalY));
             }
-            epicycles[n] = epicycle;
+            epicycles.add(n, epicycle);
         }
         return epicycles;
     }
@@ -79,7 +81,7 @@ public class Epicycle
 
             if(n == epicycles.size() - 1)
             {
-                var drawingPoint = new Coordinate(epicycles.get(n).getTerminal().getX(), epicycles.get(n).getTerminal().getY() + 15);
+                var drawingPoint = new Coordinate(epicycles.get(n).getTerminal().getX(), epicycles.get(n).getTerminal().getY());
                 Renderer.drawing.add(0, drawingPoint);
             }
         }

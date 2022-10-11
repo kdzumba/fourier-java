@@ -106,7 +106,7 @@ public class WorkspacePanel extends JPanel
             Renderer.drawing.clear();
             this.time = 0;
             var transformedImage = FourierAlgorithms.discreteFourierTransform(coordinates);
-            epicycles = new ArrayList<>(Arrays.asList(Epicycle.generateEpicycles(transformedImage)));
+            epicycles = Epicycle.generateEpicycles(transformedImage);
             this.removeAll();
             this.repaint();
             this.revalidate();
