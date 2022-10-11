@@ -2,7 +2,6 @@ package fourier.imageprocessing;
 
 import fourier.algorithms.GraphAlgorithms;
 import fourier.models.Coordinate;
-import fourier.models.Node;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 

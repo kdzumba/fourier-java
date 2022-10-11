@@ -7,15 +7,7 @@ public class UICommon
 {
         //Colors
         public static final Color COMPONENT_BACKGROUND = new Color(80, 80, 80);
-        public static final Color WATER_COLOR = new Color(128, 197, 222);
-        public static final Color ROCK_COLOR = new Color(139, 69, 19);
-        public static final Color GRASS_COLOR = new Color(126, 200, 80);
-        public static final Color WALL_COLOR = new Color(0, 0, 0);
-        public static final Color PATH_COLOR = new Color(190,155,123);
-        public static final Color START_COLOR = new Color(249,97,97);
-        public static final Color PROCESSED_COLOR = new Color(220, 220, 20);
-        public static final Color DEST_COLOR = Color.red;
-
+        public static final Color PEN_COLOR = new Color(250, 10, 200);
         //Dimensions
         public static final int COMPONENT_HEIGHT = 30;
         public static final int COMPONENT_WIDTH = 200;

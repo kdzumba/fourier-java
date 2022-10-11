@@ -19,8 +19,12 @@ public class ActionsPanel extends JPanel
     {
         super.paintComponent(g);
         if(WorkspacePanel.isDrawing)
+        {
             play.setIcon("pause");
+        }
         else
+        {
             play.setIcon("play");
+        }
     }
 }

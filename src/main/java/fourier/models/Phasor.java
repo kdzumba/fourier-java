@@ -1,16 +1,13 @@
 package fourier.models;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-import java.util.List;
-
-@Data
-@AllArgsConstructor
 public class Phasor
 {
     private Coordinate terminal;
     private double frequency;
+    public Phasor(Coordinate terminal, double frequency)
+    {
+        this.terminal = terminal;
+        this.frequency = frequency;
+    }
     public double getMagnitude()
     {
         return Math.sqrt(Math.pow(terminal.getX(), 2) + Math.pow(terminal.getY(), 2));
@@ -19,6 +16,12 @@ public class Phasor
     {
         return Math.atan2(terminal.getY(), terminal.getX());
     }
+
+    public Coordinate getTerminal(){return terminal;}
+    public void setTerminal(Coordinate terminal){this.terminal = terminal;}
+    public double getFrequency(){return frequency;}
+    public void setFrequency(double frequency) {this.frequency = frequency;}
+
 
     public Phasor multiply(Phasor other)
     {

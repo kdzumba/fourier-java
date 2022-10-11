@@ -38,7 +38,7 @@ public class PreLoadedImagesPanel extends JPanel implements ISubscriber, IPublis
         this.add(ballerinaBtn);
 
         var personUrl = getClass().getClassLoader().getResource("preloadedimages/person_with_glasses.txt");
-        var personBtn = new PreloadedImageButton("Ballerina", personUrl);
+        var personBtn = new PreloadedImageButton("Person with Glasses", personUrl);
         personBtn.addSubscriber(this);
         this.add(personBtn);
 
@@ -106,7 +106,6 @@ public class PreLoadedImagesPanel extends JPanel implements ISubscriber, IPublis
             this.setBackground(UICommon.COMPONENT_BACKGROUND);
             this.setForeground(Color.WHITE);
             this.setFont(UICommon.ALGO_FONT);
-//            this.setBorder(BorderFactory.createEmptyBorder(UICommon.H_SEPARATOR, UICommon.H_SEPARATOR, UICommon.H_SEPARATOR, UICommon.H_SEPARATOR));
         }
 
         @Override

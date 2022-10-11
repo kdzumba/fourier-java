@@ -18,7 +18,7 @@ public class Application extends JFrame implements ISubscriber
     public Application()
     {
         setLayout(new BorderLayout());
-        this.drawingPanel = new WorkspacePanel();
+        drawingPanel = new WorkspacePanel();
         LeftPanel leftPanel = new LeftPanel();
 
         var actionsPanel = new ActionsPanel();
@@ -27,8 +27,7 @@ public class Application extends JFrame implements ISubscriber
         this.add(drawingPanel, BorderLayout.CENTER);
         this.add(leftPanel, BorderLayout.WEST);
         this.add(actionsPanel, BorderLayout.NORTH);
-//        this.setSize(screenSize.width, screenSize.height);
-        this.setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+        this.setSize(screenSize.width, screenSize.height);
         this.setTitle(Constants.APPLICATION_TITLE);
         this.setResizable(true);
         this.getContentPane().setBackground(Color.BLACK);
@@ -41,7 +40,6 @@ public class Application extends JFrame implements ISubscriber
                 for(Component child : ((JPanel) c).getComponents())
                     if(child instanceof IPublisher)
                         ((IPublisher) child).addSubscriber(this);
-
         }
     }
 

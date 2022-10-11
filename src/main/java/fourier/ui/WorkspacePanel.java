@@ -35,27 +35,6 @@ public class WorkspacePanel extends JPanel
     {
         drawingPanel.update(coordinates);
     }
-
-    public
-
-    static class OriginalImagePanel extends JPanel
-    {
-        private BufferedImage originalImage;
-        @Override
-        public void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
-            if(Objects.nonNull(originalImage))
-            {
-                g.drawImage(originalImage, 0, 0, this);
-            }
-        }
-        public void setOriginalImage(BufferedImage image)
-        {
-            originalImage = image;
-        }
-    }
-
     static class DrawingPanel extends JPanel implements ActionListener
     {
         private double time = 0d;
@@ -107,9 +86,8 @@ public class WorkspacePanel extends JPanel
             this.time = 0;
             var transformedImage = FourierAlgorithms.discreteFourierTransform(coordinates);
             epicycles = Epicycle.generateEpicycles(transformedImage);
-            this.removeAll();
-            this.repaint();
             this.revalidate();
+            this.repaint();
         }
     }
 }

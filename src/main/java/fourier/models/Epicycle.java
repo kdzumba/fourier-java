@@ -79,6 +79,7 @@ public class Epicycle
             var terminalY = current.getCenter().getY() + radius * Math.sin(freq * animationTimer + phase);
             current.setTerminal(new Coordinate(terminalX, terminalY));
 
+            //The terminal point of the last epicycle in our epicycles list is the one that draws our image
             if(n == epicycles.size() - 1)
             {
                 var drawingPoint = new Coordinate(epicycles.get(n).getTerminal().getX(), epicycles.get(n).getTerminal().getY());

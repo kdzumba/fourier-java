@@ -3,6 +3,7 @@ package fourier.rendering;
 
 import fourier.models.Coordinate;
 import fourier.models.Epicycle;
+import fourier.ui.UICommon;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -15,7 +16,7 @@ public class Renderer
     public static Graphics2D graphics2D;
     public static double animationTimer = 0d;
     public static List<Coordinate> drawing = new ArrayList<>();
-    public static Color penColor = new Color(250, 10, 200);
+    public static Color penColor = UICommon.PEN_COLOR;
 
     public static void drawEpiCycles(List<Epicycle> signal)
     {
