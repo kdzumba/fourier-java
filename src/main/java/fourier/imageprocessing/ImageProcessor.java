@@ -40,7 +40,7 @@ public class ImageProcessor extends JFrame
         var imageWidth = image.getWidth();
         var pixelCoordinates = new ArrayList<Coordinate>();
 
-        int skipInterval = 2; //Dictates how many pixels we are actually considering for processing
+        int skipInterval = 1; //Dictates how many pixels we are actually considering for processing
 
         for(int x = 0; x < imageWidth; x+=skipInterval)
         {

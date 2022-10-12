@@ -13,7 +13,7 @@ public class FourierAlgorithms
 
     private static List<Phasor> convertToPhasor(List<Coordinate> cartesian)
     {
-        var interval = cartesian.size() > 15000 ? 3 : 2;
+        var interval = cartesian.size() > 15000 ? 4 : 3;
         var phasors = new ArrayList<Phasor>();
 
         for(int n = 0; n < cartesian.size(); n += interval)

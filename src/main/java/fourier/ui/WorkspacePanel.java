@@ -71,12 +71,14 @@ public class WorkspacePanel extends JPanel
             g.setColor(Color.WHITE);
             Renderer.graphics2D = (Graphics2D) g;
             var  transform = new AffineTransform();
-            transform.translate(Constants.HORIZONTAL_TRANSLATION, Constants.VERTICAL_TRANSLATION);
+            transform.translate(getWidth() / 4.0, getHeight() / 4.0);
             Renderer.graphics2D.transform(transform);
 
             Renderer.animationTimer = time;
             Epicycle.updateEpicycles(epicycles, time);
             Renderer.drawEpiCycles(epicycles);
+
+            System.out.println(getWidth() + " " + getHeight()   );
         }
 
         public void update(List<Coordinate> coordinates)

@@ -66,6 +66,11 @@ public class PreLoadedImagesPanel extends JPanel implements ISubscriber, IPublis
         var daenerysBtn = new PreloadedImageButton("Daenerys", daenerysUrl);
         daenerysBtn.addSubscriber(this);
         this.add(daenerysBtn);
+
+        var conclusionUrl = getClass().getClassLoader().getResource("preloadedimages/conclusion.txt");
+        var conclusionBtn = new PreloadedImageButton("Conclusion", conclusionUrl);
+        conclusionBtn.addSubscriber(this);
+        this.add(conclusionBtn);
     }
 
     @Override
