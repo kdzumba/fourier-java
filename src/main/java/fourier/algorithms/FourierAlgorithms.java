@@ -13,20 +13,15 @@ public class FourierAlgorithms
 
     private static List<Phasor> convertToPhasor(List<Coordinate> cartesian)
     {
-
         var interval = cartesian.size() > 15000 ? 3 : 2;
         var phasors = new ArrayList<Phasor>();
 
-        var omission = 0;
-        if(cartesian.size() % interval != 0)
-            omission = interval;
-
-        for(int n = 0; n < cartesian.size() - omission; n += interval)
+        for(int n = 0; n < cartesian.size(); n += interval)
         {
-            var real = cartesian.get(n).getX();
-            var imaginary = cartesian.get(n).getY();
-            var complex = new Phasor(new Coordinate(real, imaginary), 0);
-            phasors.add(n/interval, complex);
+            var xCoordinate = cartesian.get(n).getX();
+            var yCoordinate = cartesian.get(n).getY();
+            var phasor = new Phasor(new Coordinate(xCoordinate, yCoordinate), 0);
+            phasors.add(n/interval, phasor);
         }
         return phasors;
     }
@@ -34,18 +29,15 @@ public class FourierAlgorithms
     {
         var input = convertToPhasor(imageCoordinates);
         var output = new ArrayList<Phasor>();
-        var N = input.size(); //length of input = length of output
+        var N = input.size();
 
         for(int k = 0; k < N; k++)
         {
             var sum = new Phasor(new Coordinate(0, 0), k);
             for(int n = 0; n < N; n++)
             {
-                //x_n[cos(2 * PI * k * n)/N - sin(2 * PI * k * n)/N]
                 var theta = (2 * Math.PI * k * n) / N;
                 var multiplier = new Phasor(new Coordinate(Math.cos(theta), -1 * Math.sin(theta)), 0);
-
-                //Loop expression to the right of the summation symbol
                 sum = sum.add(input.get(n).multiply(multiplier));
             }
             sum.setTerminal(new Coordinate(sum.getTerminal().getX() / N, sum.getTerminal().getY() / N));

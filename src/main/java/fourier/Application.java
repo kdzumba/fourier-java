@@ -22,12 +22,13 @@ public class Application extends JFrame implements ISubscriber
         LeftPanel leftPanel = new LeftPanel();
 
         var actionsPanel = new ActionsPanel();
-        var screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        var screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        var currentDisplayMode = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 
         this.add(drawingPanel, BorderLayout.CENTER);
         this.add(leftPanel, BorderLayout.WEST);
         this.add(actionsPanel, BorderLayout.NORTH);
-        this.setSize(screenSize.width, screenSize.height);
+        this.setSize(currentDisplayMode.getWidth(), currentDisplayMode.getHeight());
         this.setTitle(Constants.APPLICATION_TITLE);
         this.setResizable(true);
         this.getContentPane().setBackground(Color.BLACK);

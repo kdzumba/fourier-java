@@ -81,7 +81,6 @@ public class WorkspacePanel extends JPanel
 
         public void update(List<Coordinate> coordinates)
         {
-            Renderer.graphics2D.clearRect(0, 0, Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
             Renderer.drawing.clear();
             this.time = 0;
             var transformedImage = FourierAlgorithms.discreteFourierTransform(coordinates);
