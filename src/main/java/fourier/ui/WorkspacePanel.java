@@ -77,8 +77,6 @@ public class WorkspacePanel extends JPanel
             Renderer.animationTimer = time;
             Epicycle.updateEpicycles(epicycles, time);
             Renderer.drawEpiCycles(epicycles);
-
-            System.out.println(getWidth() + " " + getHeight()   );
         }
 
         public void update(List<Coordinate> coordinates)

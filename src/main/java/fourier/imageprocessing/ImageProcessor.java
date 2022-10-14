@@ -123,6 +123,7 @@ public class ImageProcessor extends JFrame
                 var y = Integer.parseInt(pointString[1]);
                 imagePoints.add(new Coordinate(x,y));
             }
+            scanner.close();
         }
         catch(IOException | URISyntaxException e)
         {

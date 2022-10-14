@@ -52,24 +52,27 @@ public class FileChooserPanel extends JPanel implements ActionListener, IPublish
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == selectFileButton)
-        {
-            var fileChooser  = new JFileChooser();
-            fileChooser.setBackground(UICommon.COMPONENT_BACKGROUND);
-            fileChooser.setForeground(Color.WHITE);
-            fileChooser.setFont(UICommon.ALGO_FONT);
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG & GIF Images", "jpg", "png", "gif");
-            fileChooser.setFileFilter(filter);
-
-            int response = fileChooser.showOpenDialog(null);
-
-            if(response == JFileChooser.APPROVE_OPTION)
+        Thread loadImagePointsThread = new Thread(() -> {
+            if(e.getSource() == selectFileButton)
             {
-                var imagePath = fileChooser.getSelectedFile().getAbsolutePath();
-                var image = ImageProcessor.loadImageFromFile(imagePath);
-                Application.imagePoints = ImageProcessor.getOrderedPixelPositions(image);
-                subscribers.forEach(ISubscriber::update);
+                var fileChooser  = new JFileChooser();
+                fileChooser.setBackground(UICommon.COMPONENT_BACKGROUND);
+                fileChooser.setForeground(Color.WHITE);
+                fileChooser.setFont(UICommon.ALGO_FONT);
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG & GIF Images", "jpg", "png", "gif");
+                fileChooser.setFileFilter(filter);
+
+                int response = fileChooser.showOpenDialog(null);
+
+                if(response == JFileChooser.APPROVE_OPTION)
+                {
+                    var imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    var image = ImageProcessor.loadImageFromFile(imagePath);
+                    Application.imagePoints = ImageProcessor.getOrderedPixelPositions(image);
+                    subscribers.forEach(ISubscriber::update);
+                }
             }
-        }
+        });
+        loadImagePointsThread.start();
     }
 }
