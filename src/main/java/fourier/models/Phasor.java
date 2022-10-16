@@ -1,4 +1,7 @@
 package fourier.models;
+
+import java.util.Objects;
+
 public class Phasor
 {
     private Coordinate terminal;
@@ -40,5 +43,26 @@ public class Phasor
         var real = terminal.getX() + other.terminal.getX();
         var imaginary = terminal.getY() + other.terminal.getY();
         return new Phasor(new Coordinate(real, imaginary), frequency);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Phasor phasor = (Phasor) o;
+
+        if (Double.compare(phasor.frequency, frequency) != 0) return false;
+        return Objects.equals(terminal, phasor.terminal);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = terminal != null ? terminal.hashCode() : 0;
+        temp = Double.doubleToLongBits(frequency);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }
